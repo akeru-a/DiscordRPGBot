@@ -3,7 +3,7 @@ from discord.ext import commands
 
 description = '''友達とパーティーを組んで、ボスを倒す'''
 
-bot = commands.Bot(command_prefix='!', description=description)
+bot = commands.Bot(command_prefix='?', description=description)
 
 class Monster():
     def __init__(self, img, hp):
