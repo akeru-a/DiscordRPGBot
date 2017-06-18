@@ -9,8 +9,11 @@ class Monster():
     def __init__(self, img, hp):
         self.img = img
         self.hp = hp
+        self.quote = quote
 
-boss = Monster("http://68.media.tumblr.com/3d48d13edc1c3c9592721078408b6928/tumblr_nu2swkizAH1sulisxo1_1280.png", 100)
+monster = Monster("http://68.media.tumblr.com/3d48d13edc1c3c9592721078408b6928/tumblr_nu2swkizAH1sulisxo1_1280.png",
+                100,
+                "わしが倒せるのかい？")
 
 @bot.event
 async def on_ready():
@@ -20,8 +23,12 @@ async def on_ready():
 
 @bot.command()
 async def boss():
-    em = discord.Embed(**test)
-    em.set_image(url=boss.img)
-    await bot.say('```わしが倒せるのかい？```\n残り体力: {}'.format(boss.hp), embed=em)
+    test = {'title': "ボス",
+    'colour': 0xFF5773,
+    }
 
-bot.run('325880331662131201')
+    em = discord.Embed(**test)
+    em.set_image(url=monster.img)
+    await bot.say('```{}```\n残り体力: {}'.format(monster.quote, monster.hp), embed=em)
+
+bot.run('MzI1ODgwMzMxNjYyMTMxMjAx.DCerOQ.SMMLI_UXthYqCvmtfRoHmATLQgs')
