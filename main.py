@@ -22,6 +22,6 @@ async def on_ready():
 async def boss():
     em = discord.Embed(**test)
     em.set_image(url=boss.img)
-    await bot.say('```わしを倒せるのかい？```\n残り体力: {}'.format(boss.hp), embed=em)
+    await bot.say('```わしが倒せるのかい？```\n残り体力: {}'.format(boss.hp), embed=em)
 
 bot.run('325880331662131201')
