@@ -1,7 +1,7 @@
 {
     "3": {
         "dmg": 20,
-        "img": "./images/Something_like_bar.png",
+        "img": "http://i.imgur.com/3k9VcHs.png",
         "name": "バールのようなもの",
         "item_id": 3
     },
