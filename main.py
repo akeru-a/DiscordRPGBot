@@ -22,14 +22,20 @@ class Player:
         self.armour = 5
         self.weapons = ['1'] # wooden sword
 
-    def to_object(self):
-        objectified = {}
-        objectified['name'] = self.name
-        objectified['level'] = self.level
-        objectified['hp'] = self.hp
-        objectified['armour'] = self.armour
-        objectified['weapons'] = self.weapons
-        return objectified
+    def to_dict(self):
+        '''プレイヤーのデータを保存するために、プレイヤーをDictに変化する'''
+        player_dict = {}
+        player_dict['name'] = self.name
+        player_dict['level'] = self.level
+        player_dict['hp'] = self.hp
+        player_dict['armour'] = self.armour
+        player_dict['weapons'] = self.weapons
+        return player_dict
+
+    @staticmethod
+    def save_players():
+        with open('players.json', 'w') as f:
+             json.dump(players_json, f)
 
 players = {}
 with open('players.json', 'r') as f:
@@ -38,34 +44,20 @@ with open('players.json', 'r') as f:
         players[key] = Player(key, **val)
 
 
-def save_players():
-    with open('players.json', 'w') as f:
-         json.dump(players_json, f)
 
 class Item:
     def __init__(self, item_id=None, name=None, dmg=None, img=None):
         self.item_id, self.name, self.dmg, self.img = item_id, name, dmg, img
 
-    def to_object(self):
-        objectified = {}
-        objectified['item_id'] = self.item_id
-        objectified['name'] = self.name
-        objectified['dmg'] = self.dmg
-        objectified['img'] = self.img
-        return objectified
+    def to_dict(self):
+        '''アイテムのデータを保存するために、アイテムをDictに変化する'''
+        item_dict = {}
+        item_dict['item_id'] = self.item_id
+        item_dict['name'] = self.name
+        item_dict['dmg'] = self.dmg
+        item_dict['img'] = self.img
+        return item_dict
 
-
-
-
-bossmonster = {
-    'name': 'テスト・ボス',
-    'hp': 100,
-    'max_hp': 100,
-    'dmg': 15,
-    'armour': 30,
-    'quote': 'わしが倒せるのかい？',
-    'img': 'http://68.media.tumblr.com/3d48d13edc1c3c9592721078408b6928/tumblr_nu2swkizAH1sulisxo1_1280.png'
-}
 monsters = {}
 with open('monsters.json', 'r') as f:
     monsters_json = json.load(f)
@@ -73,22 +65,6 @@ with open('monsters.json', 'r') as f:
         monsters[key] = Monster(**val)
 monster = monsters['1']
 
-
-#firesword_blueprint = {
-#    'item_id': 2,
-#    'name': '炎の剣',
-#    'dmg': 30,
-#    'img': 'http://pixelartmaker.com/art/2635d6c2b056dfb.png'
-#}
-#firesword = Item(**firesword_blueprint)
-
-#wooden_sword_blueprint = {
-#    'item_id': 1,
-#    'name': '木剣',
-#    'dmg': 10,
-#    'img': 'http://pixelartmaker.com/art/57fe9b5aa5cb622.png'
-#}
-#wooden_sword = Item(**wooden_sword_blueprint)
 items = {}
 with open('items.json', 'r') as f:
     items_json = json.load(f)
@@ -106,9 +82,9 @@ async def register(ctx):
     author_id = ctx.message.author.id
     newplayer = Player(author_id)
     Player.new_player(newplayer)
-    players_json[author_id] = newplayer.to_object()
+    players_json[author_id] = newplayer.to_dict()
     players[author_id] = newplayer
-    save_players()
+    Player.save_players()
 
 @bot.command(pass_context=True, aliases=['kougeki'])
 async def attack(ctx):
@@ -135,6 +111,12 @@ async def equipment(ctx):
             string += items[weapon].name + ' dmg: {}'.format(items[weapon].dmg) + '\n'
         await bot.say(string)
 
+@bot.command()
+async def list_items():
+    response = ""
+    for key, val in items.items():
+        response += val.name + ' ダメージ: {}'.format(val.dmg) + '\n'
+    await bot.say("ゲームに含まれているアイテム: \n" + response)
 
 @bot.command(pass_context=True)
 async def get_firesword(ctx):
