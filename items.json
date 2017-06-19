@@ -1,4 +1,10 @@
 {
+    "3": {
+        "dmg": 20,
+        "img": "./images/Something_like_bar.png",
+        "name": "バールのようなもの",
+        "item_id": 3
+    },
     "2": {
         "dmg": 30,
         "img": "http://pixelartmaker.com/art/2635d6c2b056dfb.png",
