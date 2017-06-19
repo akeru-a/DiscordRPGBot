@@ -31,6 +31,17 @@ class Player:
         objectified['weapons'] = self.weapons
         return objectified
 
+players = {}
+with open('players.json', 'r') as f:
+    players_json = json.load(f)
+    for key, val in players_json.items():
+        players[key] = Player(key, **val)
+
+
+def save_players():
+    with open('players.json', 'w') as f:
+         json.dump(players_json, f)
+
 class Item:
     def __init__(self, item_id=None, name=None, dmg=None, img=None):
         self.item_id, self.name, self.dmg, self.img = item_id, name, dmg, img
@@ -45,8 +56,6 @@ class Item:
 
 
 
-with open('players.json', 'r') as f:
-    players = json.load(f)
 
 bossmonster = {
     'name': 'テスト・ボス',
@@ -57,35 +66,34 @@ bossmonster = {
     'quote': 'わしが倒せるのかい？',
     'img': 'http://68.media.tumblr.com/3d48d13edc1c3c9592721078408b6928/tumblr_nu2swkizAH1sulisxo1_1280.png'
 }
-monster = Monster(**bossmonster)
+monsters = {}
+with open('monsters.json', 'r') as f:
+    monsters_json = json.load(f)
+    for key, val in monsters_json.items():
+        monsters[key] = Monster(**val)
+monster = monsters['1']
 
 
-firesword_blueprint = {
-    'item_id': 2,
-    'name': '炎の剣',
-    'dmg': 30,
-    'img': 'http://pixelartmaker.com/art/2635d6c2b056dfb.png'
-}
-firesword = Item(**firesword_blueprint)
+#firesword_blueprint = {
+#    'item_id': 2,
+#    'name': '炎の剣',
+#    'dmg': 30,
+#    'img': 'http://pixelartmaker.com/art/2635d6c2b056dfb.png'
+#}
+#firesword = Item(**firesword_blueprint)
 
-wooden_sword_blueprint = {
-    'item_id': 1,
-    'name': '木剣',
-    'dmg': 10,
-    'img': 'http://pixelartmaker.com/art/57fe9b5aa5cb622.png'
-}
-wooden_sword = Item(**wooden_sword_blueprint)
+#wooden_sword_blueprint = {
+#    'item_id': 1,
+#    'name': '木剣',
+#    'dmg': 10,
+#    'img': 'http://pixelartmaker.com/art/57fe9b5aa5cb622.png'
+#}
+#wooden_sword = Item(**wooden_sword_blueprint)
+items = {}
 with open('items.json', 'r') as f:
-    items = json.load(f)
-
-if '1' not in items:
-    items['1'] = wooden_sword.to_object()
-    with open('items.json', 'w') as f:
-         json.dump(items, f)
-if '2' not in items:
-    items['2'] = firesword.to_object()
-    with open('items.json', 'w') as f:
-         json.dump(items, f)
+    items_json = json.load(f)
+    for key, val in items_json.items():
+        items[key] = Item(**val)
 
 @bot.event
 async def on_ready():
@@ -98,34 +106,33 @@ async def register(ctx):
     author_id = ctx.message.author.id
     newplayer = Player(author_id)
     Player.new_player(newplayer)
-    players[author_id] = newplayer.to_object()
-    with open('players.json', 'w') as f:
-         json.dump(players, f)
+    players_json[author_id] = newplayer.to_object()
+    players[author_id] = newplayer
+    save_players()
 
 @bot.command(pass_context=True, aliases=['kougeki'])
 async def attack(ctx):
     author_id = ctx.message.author.id
     if author_id in players:
         player = players[author_id]
-        weapon = items[player['weapons'][0]]
+        weapon = items[player.weapons[0]]
 
         test = {'title': "",
         'colour': 0xEF6C00,     # 色の設定
         }
         em = discord.Embed(**test)
-        em.set_image(url=weapon['img'])
+        em.set_image(url=weapon.img)
         await bot.say('```武器：{}\n{}はボスを攻撃しました！ボスは{}ダメージを受けました。```'
-                        .format(weapon['name'], ctx.message.author.name, weapon['dmg']), embed=em)
+                        .format(weapon.name, ctx.message.author.name, weapon/dmg), embed=em)
 @bot.command(pass_context=True)
 async def equipment(ctx):
     author_id = ctx.message.author.id
     if author_id in players:
         player = players[author_id]
-        weapons = player['weapons']
-        print(weapons)
+        weapons = player.weapons
         string = ''
         for weapon in weapons:
-            string += items[weapon]['name'] + ' dmg: {}'.format(items[weapon]['dmg']) + '\n'
+            string += items[weapon].name + ' dmg: {}'.format(items[weapon].dmg) + '\n'
         await bot.say(string)
 
 
@@ -134,8 +141,9 @@ async def get_firesword(ctx):
     author_id = ctx.message.author.id
     if author_id in players:
         player = players[author_id]
-        players[author_id]['weapons'].append('2')
-        print(players[author_id]['weapons'])
+        players[author_id].weapons.append('2')
+        print(players[author_id].weapons)
+        await bot.say("_{}_を手に入れました".format(items['2'].name))
 
 @bot.command()
 async def boss():

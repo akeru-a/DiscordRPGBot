@@ -1,1 +1,14 @@
-{"2": {"dmg": 30, "img": "http://pixelartmaker.com/art/2635d6c2b056dfb.png", "name": "\u708e\u306e\u5263", "item_id": 2}, "1": {"img": "http://pixelartmaker.com/art/57fe9b5aa5cb622.png", "dmg": 10, "name": "\u6728\u5263", "item_id": 1}}
+{
+    "2": {
+        "dmg": 30,
+        "img": "http://pixelartmaker.com/art/2635d6c2b056dfb.png",
+        "name": "炎の剣",
+        "item_id": 2
+    },
+    "1": {
+        "img": "http://pixelartmaker.com/art/57fe9b5aa5cb622.png",
+        "dmg": 10,
+        "name": "木剣",
+        "item_id": 1
+    }
+}

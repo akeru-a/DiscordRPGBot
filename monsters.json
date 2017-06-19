@@ -1,1 +1,11 @@
-{}
+{
+    "1": {
+      "name": "テスト・ボス",
+      "hp": 100,
+      "max_hp": 100,
+      "dmg": 15,
+      "armour": 30,
+      "quote": "わしが倒せるのかい？",
+      "img": "http://68.media.tumblr.com/3d48d13edc1c3c9592721078408b6928/tumblr_nu2swkizAH1sulisxo1_1280.png"
+    }
+}
